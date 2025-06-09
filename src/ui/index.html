@@ -1,137 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact Form</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f9;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 50px auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    h1 {
-      text-align: center;
-      color: #333;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-
-    label {
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-
-    input, textarea {
-      margin-bottom: 20px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 16px;
-    }
-
-    textarea {
-      resize: none;
-      height: 150px;
-    }
-
-    button {
-      background-color: #5cb85c;
-      color: white;
-      border: none;
-      padding: 10px;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #4cae4c;
-    }
-
-    .success,
-    .error {
-      text-align: center;
-      margin-top: 20px;
-      font-weight: bold;
-    }
-
-    .success {
-      color: green;
-    }
-
-    .error {
-      color: red;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .contact-form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .contact-form h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .form-group textarea {
+            resize: none;
+            height: 100px;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+        .submit-btn {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+        .confirmation {
+            margin-top: 15px;
+            color: green;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Contact Us</h1>
-    <form id="contactForm">
-      <label for="name">Name</label>
-      <input type="text" id="name" name="name" placeholder="Enter your name" required>
+    <div class="contact-form">
+        <h2>Contact Us</h2>
+        <form id="contactForm">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Submit</button>
+            <div id="confirmation" class="confirmation" style="display: none;">Thank you for your message!</div>
+        </form>
+    </div>
 
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+    <script>
+        // Handle form submission
+        const contactForm = document.getElementById('contactForm');
+        const confirmationMessage = document.getElementById('confirmation');
 
-      <label for="message">Message</label>
-      <textarea id="message" name="message" placeholder="Enter your message" maxlength="500" required></textarea>
+        contactForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from refreshing the page
 
-      <button type="submit">Submit</button>
-    </form>
-    <div id="feedback"></div>
-  </div>
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
 
-  <script>
-    document.getElementById('contactForm').addEventListener('submit', function(event) {
-      event.preventDefault(); // Prevent form submission
-
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const message = document.getElementById('message').value.trim();
-      const feedback = document.getElementById('feedback');
-
-      // Clear previous feedback
-      feedback.innerHTML = '';
-
-      // Validate inputs
-      if (!name || !email || !message) {
-        feedback.innerHTML = '<p class="error">All fields are required.</p>';
-        return;
-      }
-
-      if (!validateEmail(email)) {
-        feedback.innerHTML = '<p class="error">Please enter a valid email address.</p>';
-        return;
-      }
-
-      // Show success message
-      feedback.innerHTML = '<p class="success">Thank you for contacting us! Your message has been sent.</p>';
-
-      // Optionally: Here you can send the data to a server using fetch or XMLHttpRequest
-      // Example:
-      // fetch('/submit', { method: 'POST', body: JSON.stringify({ name, email, message }) });
-    });
-
-    function validateEmail(email) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
-    }
-  </script>
+            if (name && email && message) {
+                // Simple validation passed
+                confirmationMessage.style.display = 'block';
+                contactForm.reset(); // Reset the form fields
+            } else {
+                alert('Please fill out all fields.');
+            }
+        });
+    </script>
 </body>
 </html>
