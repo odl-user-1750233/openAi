@@ -7,28 +7,28 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
       margin: 0;
       padding: 0;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: #f4f4f4;
     }
 
     .contact-form {
-      background: #fff;
+      background: #ffffff;
       padding: 20px;
-      border-radius: 5px;
+      border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      max-width: 400px;
       width: 100%;
+      max-width: 400px;
     }
 
-    .contact-form h1 {
-      margin-bottom: 20px;
+    .contact-form h2 {
+      margin-bottom: 15px;
       font-size: 24px;
-      text-align: center;
+      color: #333;
     }
 
     .contact-form .form-group {
@@ -45,7 +45,7 @@
     .contact-form textarea {
       width: 100%;
       padding: 10px;
-      border: 1px solid #ddd;
+      border: 1px solid #ccc;
       border-radius: 4px;
       font-size: 16px;
     }
@@ -56,30 +56,29 @@
     }
 
     .contact-form button {
-      display: block;
       width: 100%;
       padding: 10px;
-      background-color: #007BFF;
-      color: #fff;
-      font-size: 16px;
+      background-color: #4CAF50;
       border: none;
       border-radius: 4px;
+      color: white;
+      font-size: 16px;
       cursor: pointer;
     }
 
     .contact-form button:hover {
-      background-color: #0056b3;
+      background-color: #45a049;
     }
 
     .contact-form .error {
       color: red;
       font-size: 14px;
-      margin-top: 5px;
+      margin-top: -10px;
+      margin-bottom: 10px;
     }
 
-    .contact-form .success {
+    .success-message {
       color: green;
-      font-size: 16px;
       text-align: center;
       margin-top: 15px;
     }
@@ -87,69 +86,75 @@
 </head>
 <body>
   <div class="contact-form">
-    <h1>Contact Us</h1>
-    <form id="contactForm">
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" placeholder="Your name">
-        <div class="error" id="nameError"></div>
-      </div>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="Your email">
-        <div class="error" id="emailError"></div>
-      </div>
-      <div class="form-group">
-        <label for="message">Message</label>
-        <textarea id="message" name="message" placeholder="Your message"></textarea>
-        <div class="error" id="messageError"></div>
-      </div>
-      <button type="submit">Submit</button>
-      <div class="success" id="successMessage"></div>
-    </form>
+    <h2>Contact Us</h2>
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" id="name" placeholder="Your name">
+      <div class="error" id="nameError"></div>
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Your email">
+      <div class="error" id="emailError"></div>
+    </div>
+    <div class="form-group">
+      <label for="message">Message</label>
+      <textarea id="message" placeholder="Your message"></textarea>
+      <div class="error" id="messageError"></div>
+    </div>
+    <button id="submitBtn">Submit</button>
+    <div class="success-message" id="successMessage" style="display: none;">Form submitted successfully!</div>
   </div>
 
   <script>
-    // Form validation and submission logic
-    document.getElementById('contactForm').addEventListener('submit', function(event) {
-      event.preventDefault(); // Prevent form submission
+    const nameField = document.getElementById('name');
+    const emailField = document.getElementById('email');
+    const messageField = document.getElementById('message');
+    const submitBtn = document.getElementById('submitBtn');
+    const successMessage = document.getElementById('successMessage');
 
-      // Clear previous error messages
-      document.getElementById('nameError').textContent = '';
-      document.getElementById('emailError').textContent = '';
-      document.getElementById('messageError').textContent = '';
-      document.getElementById('successMessage').textContent = '';
+    const nameError = document.getElementById('nameError');
+    const emailError = document.getElementById('emailError');
+    const messageError = document.getElementById('messageError');
 
-      // Input values
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const message = document.getElementById('message').value.trim();
+    submitBtn.addEventListener('click', (e) => {
+      e.preventDefault();
 
-      let isValid = true;
+      // Clear previous errors
+      nameError.textContent = '';
+      emailError.textContent = '';
+      messageError.textContent = '';
+      successMessage.style.display = 'none';
 
-      // Validation
-      if (!name) {
-        document.getElementById('nameError').textContent = 'Name is required.';
-        isValid = false;
+      let valid = true;
+
+      // Validate name
+      if (nameField.value.trim() === '') {
+        nameError.textContent = 'Name is required.';
+        valid = false;
       }
 
-      if (!email) {
-        document.getElementById('emailError').textContent = 'Email is required.';
-        isValid = false;
-      } else if (!/\S+@\S+\.\S+/.test(email)) {
-        document.getElementById('emailError').textContent = 'Invalid email format.';
-        isValid = false;
+      // Validate email
+      if (emailField.value.trim() === '') {
+        emailError.textContent = 'Email is required.';
+        valid = false;
+      } else if (!/\S+@\S+\.\S+/.test(emailField.value)) {
+        emailError.textContent = 'Please enter a valid email address.';
+        valid = false;
       }
 
-      if (!message) {
-        document.getElementById('messageError').textContent = 'Message is required.';
-        isValid = false;
+      // Validate message
+      if (messageField.value.trim() === '') {
+        messageError.textContent = 'Message is required.';
+        valid = false;
       }
 
-      // Submit form if valid
-      if (isValid) {
-        document.getElementById('successMessage').textContent = 'Thank you for your message!';
-        // Optionally, add backend submission logic here (e.g., send data to a server)
+      // If all fields are valid
+      if (valid) {
+        successMessage.style.display = 'block';
+        nameField.value = '';
+        emailField.value = '';
+        messageField.value = '';
       }
     });
   </script>
