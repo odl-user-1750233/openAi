@@ -9,93 +9,154 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f4f4f9;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      background-color: #f4f4f9;
     }
-    .form-container {
-      background: #ffffff;
-      padding: 20px;
+
+    .contact-form {
+      background: white;
+      padding: 30px;
       border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      width: 100%;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       max-width: 400px;
+      width: 100%;
     }
-    .form-container h2 {
-      text-align: center;
+
+    .contact-form h2 {
       margin-bottom: 20px;
+      font-size: 24px;
+      color: #333;
     }
-    .form-group {
+
+    .contact-form .form-group {
       margin-bottom: 15px;
     }
-    .form-group label {
+
+    .contact-form label {
       display: block;
       margin-bottom: 5px;
       font-weight: bold;
     }
-    .form-group input,
-    .form-group textarea {
+
+    .contact-form input,
+    .contact-form textarea {
       width: 100%;
       padding: 10px;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 5px;
+      font-size: 16px;
+      box-sizing: border-box;
     }
-    .form-group textarea {
+
+    .contact-form textarea {
       resize: none;
       height: 100px;
     }
-    .error {
+
+    .contact-form .error {
       color: red;
-      font-size: 0.9em;
+      font-size: 14px;
       margin-top: 5px;
     }
-    .success-message {
-      color: green;
-      text-align: center;
-      margin-top: 20px;
-    }
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      background-color: #007bff;
+
+    .contact-form button {
+      background: #007BFF;
       color: white;
       border: none;
-      border-radius: 4px;
+      padding: 10px 15px;
+      border-radius: 5px;
       font-size: 16px;
       cursor: pointer;
     }
-    .btn:hover {
-      background-color: #0056b3;
+
+    .contact-form button:hover {
+      background: #0056b3;
+    }
+
+    .contact-form .success-message {
+      color: green;
+      font-size: 16px;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="form-container">
+  <div class="contact-form">
     <h2>Contact Us</h2>
+    <div id="success-message" class="success-message" style="display: none;">
+      Your message has been sent successfully!
+    </div>
     <form id="contactForm">
       <div class="form-group">
         <label for="name">Name</label>
-        <input type="text" id="name" name="name" placeholder="Enter your name">
-        <div class="error" id="nameError"></div>
+        <input type="text" id="name" name="name" required />
+        <div id="nameError" class="error"></div>
       </div>
       <div class="form-group">
         <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="Enter your email">
-        <div class="error" id="emailError"></div>
+        <input type="email" id="email" name="email" required />
+        <div id="emailError" class="error"></div>
       </div>
       <div class="form-group">
         <label for="message">Message</label>
-        <textarea id="message" name="message" placeholder="Enter your message"></textarea>
-        <div class="error" id="messageError"></div>
+        <textarea id="message" name="message" required></textarea>
+        <div id="messageError" class="error"></div>
       </div>
-      <button type="submit" class="btn">Submit</button>
-      <div class="success-message" id="successMessage"></div>
+      <button type="submit">Submit</button>
     </form>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    document.getElementById("contactForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      // Clear previous error messages
+      document.getElementById("nameError").textContent = "";
+      document.getElementById("emailError").textContent = "";
+      document.getElementById("messageError").textContent = "";
+      document.getElementById("success-message").style.display = "none";
+
+      // Form field values
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const message = document.getElementById("message").value.trim();
+
+      let isValid = true;
+
+      // Validate Name
+      if (name.length < 2 || name.length > 50) {
+        document.getElementById("nameError").textContent =
+          "Name must be between 2 and 50 characters.";
+        isValid = false;
+      }
+
+      // Validate Email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        document.getElementById("emailError").textContent = "Please enter a valid email address.";
+        isValid = false;
+      }
+
+      // Validate Message
+      if (message.length < 10 || message.length > 500) {
+        document.getElementById("messageError").textContent =
+          "Message must be between 10 and 500 characters.";
+        isValid = false;
+      }
+
+      if (isValid) {
+        // Simulate successful submission (e.g., backend call here)
+        document.getElementById("success-message").style.display = "block";
+
+        // Clear form fields
+        document.getElementById("name").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("message").value = "";
+      }
+    });
+  </script>
 </body>
 </html>
