@@ -15,98 +15,143 @@
       height: 100vh;
       background-color: #f4f4f4;
     }
+
     .contact-form {
       background: #fff;
       padding: 20px;
-      border-radius: 8px;
+      border-radius: 5px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       max-width: 400px;
       width: 100%;
     }
-    .contact-form h2 {
+
+    .contact-form h1 {
       margin-bottom: 20px;
-      color: #333;
+      font-size: 24px;
+      text-align: center;
     }
+
+    .contact-form .form-group {
+      margin-bottom: 15px;
+    }
+
     .contact-form label {
       display: block;
       margin-bottom: 5px;
       font-weight: bold;
     }
-    .contact-form input, .contact-form textarea, .contact-form button {
+
+    .contact-form input,
+    .contact-form textarea {
       width: 100%;
       padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
+      border: 1px solid #ddd;
       border-radius: 4px;
       font-size: 16px;
     }
+
+    .contact-form textarea {
+      resize: none;
+      height: 100px;
+    }
+
     .contact-form button {
-      background: #007BFF;
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #007BFF;
       color: #fff;
+      font-size: 16px;
       border: none;
+      border-radius: 4px;
       cursor: pointer;
     }
+
     .contact-form button:hover {
-      background: #0056b3;
+      background-color: #0056b3;
     }
-    .success-message {
-      display: none;
+
+    .contact-form .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .contact-form .success {
       color: green;
-      font-weight: bold;
-      margin-top: 10px;
+      font-size: 16px;
+      text-align: center;
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
-
   <div class="contact-form">
-    <h2>Contact Us</h2>
+    <h1>Contact Us</h1>
     <form id="contactForm">
-      <label for="name">Name</label>
-      <input type="text" id="name" name="name" required>
-
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" required>
-
-      <label for="message">Message</label>
-      <textarea id="message" name="message" rows="5" required></textarea>
-
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Your name">
+        <div class="error" id="nameError"></div>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Your email">
+        <div class="error" id="emailError"></div>
+      </div>
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Your message"></textarea>
+        <div class="error" id="messageError"></div>
+      </div>
       <button type="submit">Submit</button>
+      <div class="success" id="successMessage"></div>
     </form>
-    <p class="success-message" id="successMessage">Thank you! Your message has been sent.</p>
   </div>
 
   <script>
+    // Form validation and submission logic
     document.getElementById('contactForm').addEventListener('submit', function(event) {
-      event.preventDefault();
+      event.preventDefault(); // Prevent form submission
 
-      // Validate form fields
+      // Clear previous error messages
+      document.getElementById('nameError').textContent = '';
+      document.getElementById('emailError').textContent = '';
+      document.getElementById('messageError').textContent = '';
+      document.getElementById('successMessage').textContent = '';
+
+      // Input values
       const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
       const message = document.getElementById('message').value.trim();
 
-      if (!name || !email || !message) {
-        alert('Please fill out all fields.');
-        return;
+      let isValid = true;
+
+      // Validation
+      if (!name) {
+        document.getElementById('nameError').textContent = 'Name is required.';
+        isValid = false;
       }
 
-      if (!validateEmail(email)) {
-        alert('Please enter a valid email address.');
-        return;
+      if (!email) {
+        document.getElementById('emailError').textContent = 'Email is required.';
+        isValid = false;
+      } else if (!/\S+@\S+\.\S+/.test(email)) {
+        document.getElementById('emailError').textContent = 'Invalid email format.';
+        isValid = false;
       }
 
-      // Show success message
-      document.getElementById('successMessage').style.display = 'block';
+      if (!message) {
+        document.getElementById('messageError').textContent = 'Message is required.';
+        isValid = false;
+      }
 
-      // Clear the form
-      document.getElementById('contactForm').reset();
+      // Submit form if valid
+      if (isValid) {
+        document.getElementById('successMessage').textContent = 'Thank you for your message!';
+        // Optionally, add backend submission logic here (e.g., send data to a server)
+      }
     });
-
-    function validateEmail(email) {
-      const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      return re.test(String(email).toLowerCase());
-    }
   </script>
-
 </body>
 </html>
