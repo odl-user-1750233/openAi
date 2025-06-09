@@ -9,146 +9,156 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
       background-color: #f4f4f9;
     }
-    .container {
-      max-width: 500px;
-      margin: 50px auto;
-      padding: 20px;
+
+    .contact-form {
       background: #fff;
+      padding: 20px;
       border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
     }
-    h2 {
-      text-align: center;
+
+    .contact-form h2 {
+      margin-bottom: 20px;
+      font-size: 24px;
       color: #333;
     }
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-    label {
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-    input, textarea, button {
+
+    .form-group {
       margin-bottom: 15px;
-      padding: 10px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
     }
-    input:focus, textarea:focus {
-      outline: none;
-      border-color: #007BFF;
-    }
-    button {
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      cursor: pointer;
-      padding: 10px 15px;
-      font-size: 16px;
-      border-radius: 4px;
-    }
-    button:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
-    .error {
-      color: red;
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
       font-size: 14px;
-      margin-top: -10px;
-      margin-bottom: 10px;
+      color: #555;
     }
-    .success {
-      color: green;
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+    }
+
+    .form-group .error {
+      color: red;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .form-message {
+      margin: 10px 0;
+      font-size: 14px;
       text-align: center;
-      margin-top: 15px;
+    }
+
+    .form-message.success {
+      color: green;
+    }
+
+    .form-message.error {
+      color: red;
+    }
+
+    .submit-btn {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .submit-btn:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="contact-form">
     <h2>Contact Us</h2>
     <form id="contactForm">
-      <label for="name">Name</label>
-      <input type="text" id="name" name="name" placeholder="Enter your name" maxlength="100" required>
-      <span id="nameError" class="error"></span>
-
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" placeholder="Enter your email" required>
-      <span id="emailError" class="error"></span>
-
-      <label for="message">Message</label>
-      <textarea id="message" name="message" placeholder="Enter your message" maxlength="500" rows="5" required></textarea>
-      <span id="messageError" class="error"></span>
-
-      <button type="submit" id="submitButton" disabled>Submit</button>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Your Name" required />
+        <div class="error" id="nameError"></div>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Your Email" required />
+        <div class="error" id="emailError"></div>
+      </div>
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
+        <div class="error" id="messageError"></div>
+      </div>
+      <div class="form-message" id="formMessage"></div>
+      <button type="submit" class="submit-btn">Submit</button>
     </form>
-    <div id="successMessage" class="success"></div>
   </div>
 
   <script>
-    const contactForm = document.getElementById('contactForm');
-    const nameInput = document.getElementById('name');
-    const emailInput = document.getElementById('email');
-    const messageInput = document.getElementById('message');
-    const submitButton = document.getElementById('submitButton');
-    const successMessage = document.getElementById('successMessage');
+    document.getElementById('contactForm').addEventListener('submit', function (event) {
+      event.preventDefault();
 
-    const nameError = document.getElementById('nameError');
-    const emailError = document.getElementById('emailError');
-    const messageError = document.getElementById('messageError');
+      // Clear previous error messages
+      document.getElementById('nameError').textContent = '';
+      document.getElementById('emailError').textContent = '';
+      document.getElementById('messageError').textContent = '';
+      document.getElementById('formMessage').textContent = '';
 
-    // Helper function to validate form inputs
-    function validateForm() {
+      // Form validation
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+
       let isValid = true;
 
-      // Validate Name
-      if (!nameInput.value.trim()) {
-        nameError.textContent = 'Name cannot be empty.';
+      if (name === '') {
+        document.getElementById('nameError').textContent = 'Name is required.';
         isValid = false;
-      } else {
-        nameError.textContent = '';
       }
 
-      // Validate Email
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(emailInput.value.trim())) {
-        emailError.textContent = 'Please enter a valid email address.';
+      if (email === '') {
+        document.getElementById('emailError').textContent = 'Email is required.';
         isValid = false;
-      } else {
-        emailError.textContent = '';
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById('emailError').textContent = 'Enter a valid email address.';
+        isValid = false;
       }
 
-      // Validate Message
-      if (!messageInput.value.trim()) {
-        messageError.textContent = 'Message cannot be empty.';
+      if (message === '') {
+        document.getElementById('messageError').textContent = 'Message is required.';
         isValid = false;
-      } else {
-        messageError.textContent = '';
       }
 
-      // Enable or disable the submit button
-      submitButton.disabled = !isValid;
+      if (isValid) {
+        // Simulate form submission
+        document.getElementById('formMessage').textContent = 'Your message has been sent successfully!';
+        document.getElementById('formMessage').classList.add('success');
 
-      return isValid;
-    }
-
-    // Add input event listeners for real-time validation
-    nameInput.addEventListener('input', validateForm);
-    emailInput.addEventListener('input', validateForm);
-    messageInput.addEventListener('input', validateForm);
-
-    // Handle form submission
-    contactForm.addEventListener('submit', function(event) {
-      event.preventDefault(); // Prevent form from refreshing the page
-
-      if (validateForm()) {
-        successMessage.textContent = 'Your message has been sent!';
-        contactForm.reset(); // Reset form fields
-        submitButton.disabled = true; // Disable submit button after successful submission
+        // Reset the form
+        document.getElementById('contactForm').reset();
+      } else {
+        document.getElementById('formMessage').textContent = 'Please fix the errors above.';
+        document.getElementById('formMessage').classList.add('error');
       }
     });
   </script>
