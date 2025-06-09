@@ -9,25 +9,20 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #f4f4f9;
+      background-color: #f4f4f4;
     }
 
-    .contact-form {
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
       background: #fff;
       padding: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 400px;
     }
 
-    .contact-form h2 {
-      margin-bottom: 20px;
-      font-size: 24px;
+    h1 {
+      text-align: center;
       color: #333;
     }
 
@@ -35,132 +30,77 @@
       margin-bottom: 15px;
     }
 
-    .form-group label {
+    label {
       display: block;
+      font-weight: bold;
       margin-bottom: 5px;
-      font-size: 14px;
-      color: #555;
     }
 
-    .form-group input,
-    .form-group textarea {
+    input, textarea, button {
       width: 100%;
       padding: 10px;
+      margin-top: 5px;
       border: 1px solid #ccc;
       border-radius: 5px;
-      font-size: 14px;
+      font-size: 16px;
     }
 
-    .form-group textarea {
-      resize: vertical;
-    }
-
-    .form-group .error {
-      color: red;
-      font-size: 12px;
-      margin-top: 5px;
-    }
-
-    .form-message {
-      margin: 10px 0;
-      font-size: 14px;
-      text-align: center;
-    }
-
-    .form-message.success {
-      color: green;
-    }
-
-    .form-message.error {
-      color: red;
-    }
-
-    .submit-btn {
+    button {
+      cursor: pointer;
       background-color: #007bff;
       color: #fff;
       border: none;
-      padding: 10px 15px;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
     }
 
-    .submit-btn:hover {
+    button:hover {
       background-color: #0056b3;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+    }
+
+    .success {
+      color: green;
+      font-size: 16px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <div class="contact-form">
-    <h2>Contact Us</h2>
+  <div class="container">
+    <h1>Contact Us</h1>
     <form id="contactForm">
       <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" placeholder="Your Name" required />
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
         <div class="error" id="nameError"></div>
       </div>
+
       <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="Your Email" required />
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
         <div class="error" id="emailError"></div>
       </div>
+
       <div class="form-group">
-        <label for="message">Message</label>
-        <textarea id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject">
+      </div>
+
+      <div class="form-group">
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
         <div class="error" id="messageError"></div>
       </div>
-      <div class="form-message" id="formMessage"></div>
-      <button type="submit" class="submit-btn">Submit</button>
+
+      <button type="submit">Submit</button>
+      <button type="reset">Reset</button>
     </form>
+    <div id="resultMessage" class="success"></div>
   </div>
 
-  <script>
-    document.getElementById('contactForm').addEventListener('submit', function (event) {
-      event.preventDefault();
-
-      // Clear previous error messages
-      document.getElementById('nameError').textContent = '';
-      document.getElementById('emailError').textContent = '';
-      document.getElementById('messageError').textContent = '';
-      document.getElementById('formMessage').textContent = '';
-
-      // Form validation
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const message = document.getElementById('message').value.trim();
-
-      let isValid = true;
-
-      if (name === '') {
-        document.getElementById('nameError').textContent = 'Name is required.';
-        isValid = false;
-      }
-
-      if (email === '') {
-        document.getElementById('emailError').textContent = 'Email is required.';
-        isValid = false;
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        document.getElementById('emailError').textContent = 'Enter a valid email address.';
-        isValid = false;
-      }
-
-      if (message === '') {
-        document.getElementById('messageError').textContent = 'Message is required.';
-        isValid = false;
-      }
-
-      if (isValid) {
-        // Simulate form submission
-        document.getElementById('formMessage').textContent = 'Your message has been sent successfully!';
-        document.getElementById('formMessage').classList.add('success');
-
-        // Reset the form
-        document.getElementById('contactForm').reset();
-      } else {
-        document.getElementById('formMessage').textContent = 'Please fix the errors above.';
-        document.getElementById('formMessage').classList.add('error');
-      }
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
